@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "489054102198",
+    "project_id": "techno-mir",
+    "storage_bucket": "techno-mir.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489054102198:android:84002539695afd5b217c17",
+        "android_client_info": {
+          "package_name": "uz.technomir.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489054102198-vlvilqqk9nbpnm1ss59bl9gkjljh3tl2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uz.technomir.app",
+            "certificate_hash": "8ac4a4434e2476f7310474e6c1c45a67c11f13b4"
+          }
+        },
+        {
+          "client_id": "489054102198-ven7n1sd0ul46fm5uspk0becmmh6jh8h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9pXBcBH0yGCxJeKy0DQdBlzuwr_dReho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489054102198-ven7n1sd0ul46fm5uspk0becmmh6jh8h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -17,9 +17,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(isLoginPage ? "Login" : "Sign Up"),
-        ),
+      appBar: AppBar(),
         body: isLoginPage
             ? LoginPage(
           onChanged: () {

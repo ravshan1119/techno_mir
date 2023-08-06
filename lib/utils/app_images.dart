@@ -38,8 +38,10 @@ class AppImages {
 
   static String checkLoader = "assets/svg/check_loader.json";
   static String emptyState = "assets/svg/empty_state.json";
+  static String orderEmpty = "assets/svg/order_empty.json";
 
   // png
   static String naushnik = "assets/images/naushnik.png";
   static String airmax = "assets/images/airmax.png";
+  static String all = "assets/images/all.png";
 }

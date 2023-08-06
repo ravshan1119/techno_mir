@@ -5,9 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:techno_mir/app/app.dart';
 import 'package:techno_mir/data/firebase/auth_service.dart';
 import 'package:techno_mir/data/firebase/category_service.dart';
+import 'package:techno_mir/data/firebase/order_sevice.dart';
 import 'package:techno_mir/data/firebase/product_service.dart';
 import 'package:techno_mir/providers/auth_provider.dart';
 import 'package:techno_mir/providers/category_provider.dart';
+import 'package:techno_mir/providers/order_provider.dart';
 import 'package:techno_mir/providers/products_provider.dart';
 import 'package:techno_mir/providers/profile_provider.dart';
 import 'package:techno_mir/providers/tab_box_client_provider.dart';
@@ -47,6 +49,11 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (context) =>
               ProductsProvider(productsService: ProductsService()),
+          lazy: true,
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              OrderProvider(orderService: OrderService()),
           lazy: true,
         ),
       ],

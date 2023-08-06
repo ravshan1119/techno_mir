@@ -24,19 +24,20 @@ class _ProfileScreenClientState extends State<ProfileScreenClient> {
     User? user = context.read<ProfileProvider>().currentUser;
     return Scaffold(
       appBar: AppBar(
+
         title: const Text(
-          "Profil Screen Client",
+          "Profile",
           style: TextStyle(color: Colors.black),
         ),
-        elevation: 5,
+        elevation: 0,
         actions: [
           IconButton(
               onPressed: () {
                 context.read<AuthProvider>().logOutUser(context);
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.logout_outlined,
-                color: Colors.black,
+                color: AppColors.c_FE3A30,
               ))
         ],
       ),

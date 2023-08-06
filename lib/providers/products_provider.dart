@@ -17,7 +17,7 @@ class ProductsProvider with ChangeNotifier {
   TextEditingController productPriceController = TextEditingController();
   TextEditingController productDescController = TextEditingController();
   TextEditingController productCountController = TextEditingController();
-  String productUrl="";
+  List<String> uploadedImagesUrls=[];
 
   Future<void> addProduct({
     required BuildContext context,
@@ -78,7 +78,7 @@ class ProductsProvider with ChangeNotifier {
       hideLoading(dialogContext: context);
     }
     if (data.error.isEmpty) {
-      productUrl = data.data as String;
+      uploadedImagesUrls = data.data;
       notifyListeners();
     } else {
       if (context.mounted) {
@@ -133,45 +133,67 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateProduct({
+  Future<void> uploadProductImages({
     required BuildContext context,
-    required String imagePath,
-    required ProductModel productModel,
+    required List<XFile> images,
   }) async {
-    String name = productNameController.text;
-    String categoryDesc = productPriceController.text;
+    showLoading(context: context);
 
-    if (name.isNotEmpty && categoryDesc.isNotEmpty) {
-      showLoading(context: context);
-      UniversalData universalData = await productsService.updateProduct(
-        productModel: ProductModel(
-          count: 1,
-          price: 23,
-          productImages: [],
-          categoryId: productModel.categoryId,
-          createdAt: productModel.createdAt,
-          productName: productNameController.text,
-          description: productPriceController.text,
-          productId: productModel.productId,
-          currency: "SO'M",
-        ),
-      );
-      if (context.mounted) {
-        hideLoading(dialogContext: context);
-      }
-      if (universalData.error.isEmpty) {
-        if (context.mounted) {
-          showMessage(context, universalData.data as String);
-          clearTexts();
-          Navigator.pop(context);
-        }
-      } else {
-        if (context.mounted) {
-          showMessage(context, universalData.error);
-        }
+    for (var element in images) {
+      UniversalData data = await FileUploader.imageUploader(element);
+      if (data.error.isEmpty) {
+        uploadedImagesUrls.add(data.data as String);
       }
     }
+
+    notifyListeners();
+
+    if (context.mounted) {
+      hideLoading(dialogContext: context);
+    }
   }
+
+  // Future<void> updateProduct({
+  //   required BuildContext context,
+  //   required String imagePath,
+  //   required ProductModel productModel,
+  // }) async {
+  //   String name = productNameController.text;
+  //   String categoryDesc = productPriceController.text;
+  //
+  //   if(productUrl.isEmpty) productUrl = productModel.productImages;
+  //
+  //   if (name.isNotEmpty && categoryDesc.isNotEmpty) {
+  //     showLoading(context: context);
+  //     UniversalData universalData = await productsService.updateProduct(
+  //       productModel: ProductModel(
+  //         count: 1,
+  //         price: 23,
+  //         productImages: [],
+  //         categoryId: productModel.categoryId,
+  //         createdAt: productModel.createdAt,
+  //         productName: productNameController.text,
+  //         description: productPriceController.text,
+  //         productId: productModel.productId,
+  //         currency: "SO'M",
+  //       ),
+  //     );
+  //     if (context.mounted) {
+  //       hideLoading(dialogContext: context);
+  //     }
+  //     if (universalData.error.isEmpty) {
+  //       if (context.mounted) {
+  //         showMessage(context, universalData.data as String);
+  //         clearTexts();
+  //         Navigator.pop(context);
+  //       }
+  //     } else {
+  //       if (context.mounted) {
+  //         showMessage(context, universalData.error);
+  //       }
+  //     }
+  //   }
+  // }
 
   setInitialValues(CategoryModel categoryModel) {
     productNameController =
@@ -182,6 +204,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   clearTexts() {
+    uploadedImagesUrls=[];
     productPriceController.clear();
     productNameController.clear();
     productDescController.clear();

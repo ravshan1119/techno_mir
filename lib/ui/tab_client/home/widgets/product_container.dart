@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,11 +6,12 @@ import 'package:techno_mir/utils/app_colors.dart';
 import 'package:techno_mir/utils/app_images.dart';
 
 class ProductContainer extends StatelessWidget {
-  const ProductContainer({super.key, required this.title, required this.currency, required this.price});
+  const ProductContainer({super.key, required this.title, required this.currency, required this.price, required this.images});
 
   final String title;
   final String currency;
   final String price;
+  final List<dynamic> images;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,14 @@ class ProductContainer extends StatelessWidget {
               child: SizedBox(
                 height: 125.h,
                 width: 125.h,
-                child: Image.asset(AppImages.naushnik),
+                child: CachedNetworkImage(
+                  imageUrl: images[0],
+                  placeholder: (context, url) => const Padding(
+                    padding: EdgeInsets.all(50),
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
               ),
             ),
           ),

@@ -95,13 +95,49 @@ class _HomeScreenClientState extends State<HomeScreenClient> {
                         if (snapshot.hasData) {
                           return SizedBox(
                             height: 60.h,
-                            child: Expanded(
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  ZoomTapAnimation(
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                ZoomTapAnimation(
+                                  onTap: () {
+                                    categoryId = "";
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 6.w, vertical: 9.h),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 16.w, vertical: 10.h),
+                                    height: 50.h,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(16.r),
+                                        color: categoryId == ""
+                                            ? Colors.tealAccent
+                                            : Colors.amber),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                            height: 30.h,
+                                            width: 30.h,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(2),
+                                              child:
+                                                  Image.asset(AppImages.all),
+                                            )),
+                                        SizedBox(width: 10.w),
+                                        Text("All"),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                ...List.generate(
+                                  snapshot.data!.length,
+                                  (index) => ZoomTapAnimation(
                                     onTap: () {
-                                      categoryId = "";
+                                      categoryId =
+                                          snapshot.data![index].categoryId;
                                       setState(() {});
                                     },
                                     child: Container(
@@ -113,75 +149,37 @@ class _HomeScreenClientState extends State<HomeScreenClient> {
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(16.r),
-                                          color: categoryId == ""
+                                          color: categoryId ==
+                                                  snapshot
+                                                      .data![index].categoryId
                                               ? Colors.tealAccent
                                               : Colors.amber),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
+                                      child: Center(
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
                                               height: 30.h,
                                               width: 30.h,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2),
-                                                child:
-                                                    Image.asset(AppImages.all),
-                                              )),
-                                          SizedBox(width: 10.w),
-                                          Text("All"),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  ...List.generate(
-                                    snapshot.data!.length,
-                                    (index) => ZoomTapAnimation(
-                                      onTap: () {
-                                        categoryId =
-                                            snapshot.data![index].categoryId;
-                                        setState(() {});
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 6.w, vertical: 9.h),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 16.w, vertical: 10.h),
-                                        height: 50.h,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(16.r),
-                                            color: categoryId ==
-                                                    snapshot
-                                                        .data![index].categoryId
-                                                ? Colors.tealAccent
-                                                : Colors.amber),
-                                        child: Center(
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                height: 30.h,
-                                                width: 30.h,
-                                                child: CachedNetworkImage(
-                                                  imageUrl: snapshot
-                                                      .data![index].imageUrl,
-                                                  placeholder: (context, url) =>
-                                                      CircularProgressIndicator(),
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          Icon(Icons.error),
-                                                ),
+                                              child: CachedNetworkImage(
+                                                imageUrl: snapshot
+                                                    .data![index].imageUrl,
+                                                placeholder: (context, url) =>
+                                                    CircularProgressIndicator(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
                                               ),
-                                              SizedBox(width: 10.w),
-                                              Text(snapshot
-                                                  .data![index].categoryName),
-                                            ],
-                                          ),
+                                            ),
+                                            SizedBox(width: 10.w),
+                                            Text(snapshot
+                                                .data![index].categoryName),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
+                                  ),
+                                )
+                              ],
                             ),
                           );
                         }

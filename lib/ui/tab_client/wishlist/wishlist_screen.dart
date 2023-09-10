@@ -7,8 +7,8 @@ import 'package:techno_mir/ui/tab_client/home/widgets/product_detailt_screen.dar
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class WishlistScreenClient extends StatelessWidget {
-  WishlistScreenClient({super.key});
-  String categoryId = "";
+  const WishlistScreenClient({super.key});
+  final String categoryId = "";
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class WishlistScreenClient extends StatelessWidget {
                 },
               );
             } else {
-              return const CircularProgressIndicator();
+              return const Center(child: CircularProgressIndicator());
             }
           },
         ),

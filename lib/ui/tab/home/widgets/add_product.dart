@@ -183,46 +183,128 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  SizedBox(
-                    width: 150,
-                    height: 150,
-                    child: TextButton(
-                      onPressed: () {
-                        showBottomSheetDialog();
-                      },
-                      style: TextButton.styleFrom(
-                          backgroundColor: Theme.of(context).indicatorColor),
-                      child: context
+                  context.watch<ProductsProvider>().uploadedImagesUrls.isEmpty
+                      ? TextButton(
+                    onPressed: () {
+                      showBottomSheetDialog();
+                    },
+                    style: TextButton.styleFrom(
+                        backgroundColor:
+                        Theme.of(context).indicatorColor),
+                    child: const Text(
+                      "Select Image",
+                      style: TextStyle(color: Colors.black),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                      : SizedBox(
+                    height: 100,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        ...List.generate(
+                            context
+                                .watch<ProductsProvider>()
+                                .uploadedImagesUrls
+                                .length, (index) {
+                          String singleImage = context
                               .watch<ProductsProvider>()
-                              .productUrl
-                              .isEmpty
-                          ? const Text(
-                              "Image Not Selected",
-                              style: TextStyle(color: Colors.black),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            )
-                          : Image.network(
-                              context.watch<ProductsProvider>().productUrl),
+                              .uploadedImagesUrls[index];
+                          return Container(
+                            padding: const EdgeInsets.all(5),
+                            margin: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Image.network(
+                              singleImage,
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.fill,
+                            ),
+                          );
+                        })
+                      ],
                     ),
                   ),
+                  // SizedBox(
+                  //   width: 150,
+                  //   height: 150,
+                  //   child: TextButton(
+                  //     onPressed: () {
+                  //       showBottomSheetDialog();
+                  //     },
+                  //     style: TextButton.styleFrom(
+                  //         backgroundColor: Theme.of(context).indicatorColor),
+                  //     child: context
+                  //             .watch<ProductsProvider>()
+                  //             .uploadedImagesUrls
+                  //             .isEmpty
+                  //         ? const Text(
+                  //             "Image Not Selected",
+                  //             style: TextStyle(color: Colors.black),
+                  //             maxLines: 1,
+                  //             overflow: TextOverflow.ellipsis,
+                  //           )
+                  //         : Image.network(
+                  //             context.watch<ProductsProvider>().uploadedImagesUrls[0]),
+                  //   ),
+                  // ),
                   const SizedBox(height: 24),
                 ],
               ),
             ),
+            // GlobalButton(
+            //     title: widget.productModel == null
+            //         ? "Add product"
+            //         : "Update product",
+            //     onTap: () {
+            //       if (imagePath != defaultImageConstant &&
+            //           selectedCategoryId.isNotEmpty) {
+            //         context.read<ProductsProvider>().addProduct(
+            //               context: context,
+            //               imageUrls: [imagePath],
+            //               categoryId: selectedCategoryId,
+            //               productCurrency: selectedCurrency,
+            //             );
+            //       } else {
+            //         ScaffoldMessenger.of(context).showSnackBar(
+            //           const SnackBar(
+            //             duration: Duration(milliseconds: 500),
+            //             backgroundColor: Colors.red,
+            //             margin: EdgeInsets.symmetric(
+            //               vertical: 100,
+            //               horizontal: 20,
+            //             ),
+            //             behavior: SnackBarBehavior.floating,
+            //             content: Text(
+            //               "Ma'lumotlar to'liq emas!!!",
+            //               style: TextStyle(
+            //                 color: Colors.white,
+            //                 fontWeight: FontWeight.w600,
+            //                 fontSize: 22,
+            //               ),
+            //             ),
+            //           ),
+            //         );
+            //       }
+            //     }),
             GlobalButton(
                 title: widget.productModel == null
                     ? "Add product"
                     : "Update product",
                 onTap: () {
-                  if (imagePath != defaultImageConstant &&
+                  if (context
+                      .read<ProductsProvider>()
+                      .uploadedImagesUrls
+                      .isNotEmpty &&
                       selectedCategoryId.isNotEmpty) {
                     context.read<ProductsProvider>().addProduct(
-                          context: context,
-                          imageUrls: [imagePath],
-                          categoryId: selectedCategoryId,
-                          productCurrency: selectedCurrency,
-                        );
+                      context: context,
+                      categoryId: selectedCategoryId,
+                      productCurrency: selectedCurrency, imageUrls: context.read<ProductsProvider>().uploadedImagesUrls,
+                    );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -305,15 +387,14 @@ class _ProductAddScreenState extends State<ProductAddScreen> {
   }
 
   Future<void> _getFromGallery() async {
-    XFile? xFile = await picker.pickImage(
-      source: ImageSource.gallery,
+    List<XFile> xFiles = await picker.pickMultiImage(
       maxHeight: 512,
       maxWidth: 512,
     );
-    if (xFile != null) {
-      setState(() {
-        imagePath = xFile.path;
-      });
-    }
+    await Provider.of<ProductsProvider>(context, listen: false)
+        .uploadProductImages(
+      context: context,
+      images: xFiles,
+    );
   }
 }

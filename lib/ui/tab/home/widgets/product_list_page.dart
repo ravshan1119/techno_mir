@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -94,6 +95,18 @@ class _ProductsListPageState extends State<ProductsListPage> {
                             (index) {
                               ProductModel productModel = snapshot.data![index];
                               return ListTile(
+                                leading: SizedBox(
+                                  height: 50.h,
+                                  width: 50.h,
+                                  child: CachedNetworkImage(
+                                    imageUrl: productModel.productImages[0],
+                                    placeholder: (context, url) => const Padding(
+                                      padding: EdgeInsets.all(16),
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  ),
+                                ),
                                 onLongPress: () {
                                   context
                                       .read<ProductsProvider>()
